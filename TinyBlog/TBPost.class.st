@@ -10,3 +10,15 @@ Class {
 	],
 	#category : #TinyBlog
 }
+
+{ #category : #actions }
+TBPost >> isUnclassified [
+
+^ self category = TBPost unclassifiedTag 
+]
+
+{ #category : #actions }
+TBPost >> isVisible [
+
+^ self visible
+]
