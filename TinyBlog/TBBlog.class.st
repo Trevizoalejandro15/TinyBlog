@@ -5,9 +5,6 @@ Class {
 		'posts',
 		'uniqueInstance'
 	],
-	#classInstVars : [
-		'uniqueInstance'
-	],
 	#category : #TinyBlog
 }
 
@@ -50,7 +47,9 @@ TBBlog class >> current [
 
 "responde a la instancia de TBRepository"
 
-^ uniqueInstance ifNil:  [ uniqueInstance := self new ]
+^ self selectAll 
+	ifNotEmpty: [  :x 	| x anyOne ]
+	ifEmpty: [ self new save ]
 ]
 
 { #category : #accessing }
@@ -59,9 +58,24 @@ self reset
 ]
 
 { #category : #accessing }
+TBBlog class >> initializeVoyageOnMemoryDB [
+
+VOMemoryRepository new enableSingleton 
+]
+
+{ #category : #accessing }
+TBBlog class >> isVoyageRoot [
+
+"indica que la instancia de esta clase estan en lo alto del nivel de documentos en noSQL database"
+
+
+^ true
+]
+
+{ #category : #accessing }
 TBBlog class >> reset [ 
 
-uniqueInstance := nil
+self initializeVoyageOnMemoryDB 
 ]
 
 { #category : #'as yet unclassified' }
@@ -103,8 +117,12 @@ posts := OrderedCollection new.
 
 { #category : #removing }
 TBBlog >> removeAllPosts [
+"Se acopla el mensaje para salvar en la dataBase"
 
-posts := OrderedCollection new
+posts do: [ : i | i remove ].
+
+posts := OrderedCollection new.
+self save.
 ]
 
 { #category : #removing }
@@ -118,5 +136,10 @@ TBBlog >> writeBlogPost: aPost [
 
 "Agrega un post a la lista de posts"
 
-posts add: aPost
+"Se acopla el metodo para salvar en la dataBase"
+posts add: aPost.
+aPost save.
+
+self allBlogPosts add: aPost.
+self save
 ]

@@ -11,6 +11,14 @@ Class {
 	#category : #TinyBlog
 }
 
+{ #category : #testing }
+TBPost class >> isVoyageRoot [
+
+"Indica que la instancia de esta clase esta en el top nivel de documentos de noSQL dataBase"
+
+^ true
+]
+
 { #category : #'as yet unclassified' }
 TBPost class >> title: aTitle text: aText [
 

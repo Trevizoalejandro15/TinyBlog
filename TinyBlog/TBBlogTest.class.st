@@ -4,27 +4,34 @@ Class {
 	#instVars : [
 		'blog',
 		'post',
-		'first'
+		'first',
+		'previousRepository'
 	],
 	#category : #TinyBlog
 }
 
 { #category : #running }
 TBBlogTest >> setUp [ 
+"Se agregan instrucciones para salvar tambien en la dataBase"
+previousRepository := VORepository current.
+VORepository setRepository: VOMemoryRepository new.
 
 blog:= TBBlog current.
-blog removeAllPosts.
 
 first := TBPost title: 'Un titulo' text: 'A text' category: 'First Category'.
 blog writeBlogPost: first.
+
+blog writeBlogPost: first .
 
 post := (TBPost title: 'Otro titulo' text: 'Otro texto' category: 'Segunda Categoria') beVisible.
 ]
 
 { #category : #running }
 TBBlogTest >> tearDown [ 
+"Restauramos el objeto de la base de datos original"
 
-TBBlog reset
+VORepository setRepository: previousRepository 
+
 ]
 
 { #category : #running }
