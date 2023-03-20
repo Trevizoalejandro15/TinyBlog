@@ -18,7 +18,7 @@ blog removeAllPosts.
 first := TBPost title: 'Un titulo' text: 'A text' category: 'First Category'.
 blog writeBlogPost: first.
 
-post := (TBPost title: 'Otro titulo' text: 'Otro texto' category: 'Segunfa Categoria') beVisible.
+post := (TBPost title: 'Otro titulo' text: 'Otro texto' category: 'Segunda Categoria') beVisible.
 ]
 
 { #category : #running }
@@ -42,6 +42,38 @@ self assert: blog allBlogPosts size equals: 2
 ]
 
 { #category : #running }
+TBBlogTest >> testAllBlogPostsFromCategory [
+
+self assert: (blog allBlogPostsFromCategory: 'Primera Categoria')
+size equals: 0
+]
+
+{ #category : #running }
+TBBlogTest >> testAllCategories [
+
+blog writeBlogPost: post.
+
+self assert: blog allCategories size equals: 2
+]
+
+{ #category : #running }
+TBBlogTest >> testAllVisibleBlogPosts [
+
+blog writeBlogPost: post.
+self assert: blog allVisibleBlogPosts size equals: 1
+]
+
+{ #category : #running }
+TBBlogTest >> testAllVisibleBlogPostsFromCategory [
+
+self assert: (blog allVisibleBlogPostsFromCategory: 'Primera Categoria')
+size equals: 0.
+
+self assert: (blog allVisibleBlogPostsFromCategory: 'Segunda Categoria')
+size equals: 0
+]
+
+{ #category : #running }
 TBBlogTest >> testRemoveAllBlogPosts [
 
 blog removeAllPosts .
@@ -53,4 +85,11 @@ self assert: blog size equals: 0
 TBBlogTest >> testSize [ 
 
 self assert: blog size equals:1
+]
+
+{ #category : #running }
+TBBlogTest >> testUnclassifiedBlogPosts [
+
+self assert: (blog allBlogPosts select: [:p | p isUnclassified ])
+size equals: 0
 ]
